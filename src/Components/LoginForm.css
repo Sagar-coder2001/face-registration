@@ -1,12 +1,17 @@
 
-
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
 }
 body{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.normal-container{
     width: 100%;
     height: 100vh;
     display: flex;
@@ -18,6 +23,8 @@ body{
     padding: 10px;
     margin: auto;
     padding: 30px 0px;
+    max-width: 100%;
+    border: 1px solid;
 }
 .loader {
     border: 6px solid #f3f3f3; /* Light grey */
@@ -38,12 +45,21 @@ body{
   }
 
 
-.normal-container img{
+.normal-container .firstimg{
     position: absolute;
-    left: 20;
+    top: 0;
+    left: 0;
     width: 50px;
     height: 50px;
 }
+.normal-container .secondimg{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+}
+
 .userexists{
     position: absolute;
     top: 50%;
@@ -87,11 +103,9 @@ body{
     display: flex;
     justify-content: space-around;
   }
-  .logo-container img{
-    position: absolute;
-    top: 0;
-    left: 10px;
-  }
+  /* .normal-form{
+    border: 1px solid;
+  } */
 
 /* add responsive the width of form  */
 @media screen and (max-width:530px) {

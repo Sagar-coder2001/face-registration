@@ -124,17 +124,28 @@ const LoginForm = () => {
     setSubmited(false);
     setUserExists(false)
   }
-
-
-  const downloadQr = () => {
-    if (qrimg) {
-      const link = document.createElement('a');
-      link.href = `http://192.168.1.25/Zeal_Event/API/${qrimg}`;
-      link.download = 'qrcode.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+  
+  const downloadQr = async () => {
+        try {
+            const response = await fetch(`https://192.168.1.25/Zeal_Event/API/qrcode/images/?url=${encodeURIComponent(qrimg)}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch image: ${response.statusText}`);
+            }
+            const blob = await response.blob();
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            const filename = imageUrl.split('/').pop() || 'downloaded-image.jpeg';
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        } catch (err) {
+            console.error('Download error:', err);
+            alert('Failed to download the image. Please check the URL or server configuration.');
+        } finally {
+         console.log('Finally')
+        }
   };
 
 
@@ -163,7 +174,7 @@ const LoginForm = () => {
     <>
       <div className='normal-container'>
         <div className="logo-container container">
-          <img src= {leftlogo} />
+          <img src= {leftlogo} className='firstimg' />
         </div>
          <div className="form-conatiner">
         {
@@ -190,7 +201,7 @@ const LoginForm = () => {
           ) : !userExists && (
             <div className="container" >
               <div>
-                <form className='row' style={{ backgroundImage: `url(${Data.bgimg})` }}>
+                <form className='row'>
                   <h3 className='text-center'>Normal Form</h3>
                   <div className="mb-2 col-md-12">
                     <label htmlFor="fname" className="form-label fs-5">First Name : </label>
@@ -204,7 +215,7 @@ const LoginForm = () => {
                   </div>
                   <div className="mb-2 col-md-12">
                     <label htmlFor="mobile-no" className="form-label fs-5">Mobile No :</label>
-                    <input type="tel" className="form-control" id="mobileno" name='mobileno' onChange={handleChange} />
+                    <input type="tel" className="form-control" id="mobileno" name='mobileno' maxLength={10} onChange={handleChange} />
                     {mobileError && <span className="error text-danger">{mobileError}</span>}
                   </div>
                   <div className="mb-3 col-md-12">
